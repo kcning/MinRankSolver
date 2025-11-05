@@ -2,10 +2,11 @@ NAME
     mrsolver
 
 DESCRIPTION
-    TODO
+    C implementation of the Multi-homogeneous XL algorithm for solving MinkRank
+    problems
 
 DOCUMENTATION
-    TODO
+    Please refer to our paper
 
 DEPENDENCIES
     cmake, make, gcc
@@ -14,12 +15,10 @@ OPTIONAL DEPENDENCIES
     none
 
 OPTIONS
-    see the help message (--help)
+    Please see the help message (--help)
 
 BUILD
     run:
-        $ cmake . && make mrsolver
-    or
-        $ cmake . && make -j$(CPUS) mrsolver
+        $ mkdir build && cd build && cmake .. && make -j mrsolver
 
-    An executable 'mrsolver' should appear in dir 'src'
+    An executable 'mrsolver' should appear in dir 'build/src'
