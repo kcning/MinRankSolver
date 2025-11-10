@@ -6,7 +6,7 @@ DESCRIPTION
     problems
 
 DOCUMENTATION
-    Please refer to our paper
+    Please refer to our paper: https://eprint.iacr.org/2025/2060
 
 DEPENDENCIES
     cmake, make, gcc
