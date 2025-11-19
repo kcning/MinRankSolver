@@ -17,19 +17,24 @@
  * function implementations
  * ======================================================================== */
 
-static inline void
+static inline int32_t
 loader_gfm_store_row(gf_t* coeffs, uint32_t ncol, char buf[]) {
     char* token = strtok(buf, " ");
     uint32_t i = 0;
     while(token) {
         gf_t v = atoi(token);
-        assert(v <= GF_MAX);
+
+        if(v > GF_MAX)
+            return 1;
+
         coeffs[i++] = v;
         token = strtok(NULL, " ");
     }
 
-    assert(i == ncol);
-    (void) ncol;
+    if(i != ncol)
+        return 1;
+
+    return 0;
 }
 
 static inline enum LoaderGFMfromFileCode
@@ -52,14 +57,18 @@ loader_gfm_load_1_matrix(gf_t* restrict coeffs, uint32_t idx,
         return FORMAT_ERR;
 
     uint32_t r = 1;
-    loader_gfm_store_row(coeffs, ncol, buf);
+    if(loader_gfm_store_row(coeffs, ncol, buf))
+        return FORMAT_ERR;
+
     coeffs += ncol;
 
     while(fgets(buf, buf_size, f) && strnlen(buf, buf_size-1) > 1) { // \n counts
         if(ncol != count_int_in_str(buf))
             return FORMAT_ERR;
 
-        loader_gfm_store_row(coeffs, ncol, buf);
+        if(loader_gfm_store_row(coeffs, ncol, buf))
+            return FORMAT_ERR;
+
         coeffs += ncol;
         ++r;
     }
