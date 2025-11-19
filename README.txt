@@ -3,7 +3,7 @@ NAME
 
 DESCRIPTION
     C implementation of the Multi-homogeneous XL algorithm for solving MinkRank
-    problems. Please note that the current program assume GF(16) and has to be
+    problems. Please note that the current program assumes GF(16) and has to be
     expanded to support arbitrary fields.
 
 DOCUMENTATION
