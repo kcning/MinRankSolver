@@ -285,7 +285,7 @@ mdmac_combi_create_from_ks(const GFM* restrict ks, const MinRank* restrict mr,
  *      1) full_nrow: number of rows in the full MDMac
  *      2) nrow: number of rows to randomly select
  *      3) seed: seed for the random number generator
- *      4) cb: the callback function, which takes 2 parameters
+ *      4) cb: the callback function, which takes 3 parameters
  *          1st param: how many random rows have been sampled
  *          2nd param: the index of the randomly selected row
  *          3rd param: a generic ptr which can be used to pass arguments to and
@@ -296,33 +296,106 @@ int64_t
 mdmac_iter_random_rows(uint64_t full_nrow, uint64_t nrow, int32_t seed,
                        mdmac_iter_rows_cb_t* cb, void* arg);
 
+/* usage: Given parameters that defines struct MDMac, create an
+ *      iterator which can be used to iterate over the columns
+ *      indices of the struct MDMac
+ * params:
+ *      1) k: number of linear variables
+ *      2) r: number of kernel variables in each group
+ *      3) c: number of groups of kernel variables
+ *      4) mdeg: ptr to struct MDeg, target multi-degree
+ *      5) cb: a callback function which decides which column
+ *          indices should be traverse by the iterator, which takes 3 parameters
+ *          1st param: how many random rows have been sampled
+ *          2nd param: the index of the randomly selected row
+ *          3rd param: a generic ptr which can be used to pass arguments to and
+ *              retrieve results from the callback function
+ * return: a ptr to struct MDMacColIterator on success. NULL on error */
 MDMacColIterator*
 mdmac_col_iter_create(uint32_t k, uint32_t r, uint32_t c,
                       const MDeg* mdeg, mdmac_col_iter_cb_t* cb);
 
+/* usage: Given a struct MDMac defined by a single multi-degree, create an
+ *      iterator which can be used to iterate over the columns indices of the
+ *      struct MDMac
+ * params:
+ *      1) m: ptr to struct MDMac defined by a single multi-degree
+ *      2) cb: a callback function which decides which column
+ *          indices should be traverse by the iterator, which takes 3 parameters
+ *          1st param: how many random rows have been sampled
+ *          2nd param: the index of the randomly selected row
+ *          3rd param: a generic ptr which can be used to pass arguments to and
+ *              retrieve results from the callback function
+ * return: a ptr to struct MDMacColIterator on success. NULL on error */
 MDMacColIterator*
 mdmac_col_iter_create_from_mdmac(const MDMac* m, mdmac_col_iter_cb_t* cb);
 
+/* usage: Given a struct MDMac defined by glueing several multi-degrees, create
+ *      an iterator which can be used to iterate over the columns indices of
+ *      the struct MDMac
+ * params:
+ *      1) m: ptr to struct MDMac defined by glueing several multi-degrees
+ *      2) cb: a callback function which decides which column
+ *          indices should be traverse by the iterator, which takes 3 parameters
+ *          1st param: how many random rows have been sampled
+ *          2nd param: the index of the randomly selected row
+ *          3rd param: a generic ptr which can be used to pass arguments to and
+ *              retrieve results from the callback function
+ * return: a ptr to struct MDMacColIterator on success. NULL on error */
 MDMacColIterator*
 mdmac_combi_col_iter_create(uint32_t k, uint32_t r, uint32_t c,
                             const MDeg** m_degs, uint32_t degs_sz,
                             const MDeg* mdeg_max, mdmac_col_iter_cb_t* cb);
 
+/* usage: Given a struct MDMacColIterator, release its resources
+ * params:
+ *      1) it: ptr to struct MDMacColIterator
+ * return: void */
 void
 mdmac_col_iter_free(MDMacColIterator* it);
 
+/* usage: Given a struct MDMacColIterator, initialize it such that
+ *      its returns the first next column index that meets the selection
+ *      critera when `mdmac_col_iter_idx` is called
+ * params:
+ *      1) it: ptr to struct MDMacColIterator
+ * return: void */
 void
 mdmac_col_iter_begin(MDMacColIterator* it);
 
+/* usage: Given a struct MDMacColIterator, increment its column to the
+ *      next one that meets the selection critera
+ * params:
+ *      1) it: ptr to struct MDMacColIterator; must have been initialized
+ * return: void */
 void
 mdmac_col_iter_next(MDMacColIterator* it);
 
+/* usage: Given a struct MDMacColIterator, check if the iterator has reached
+ *      the last column index
+ * params:
+ *      1) it: ptr to struct MDMacColIterator
+ * return: true if yes, false if there is (are) still column index (indices)
+ *      to traverse */
 bool
 mdmac_col_iter_end(const MDMacColIterator* it);
 
+/* usage: Given a struct MDMacColIterator, return the next column index that
+ *      meets the selection critera
+ * params:
+ *      1) it: ptr to struct MDMacColIterator
+ * return: the next column index as a uint64_t */
 uint64_t
 mdmac_col_iter_idx(const MDMacColIterator* it);
 
+/* usage: Given a struct MDMacColIterator, change its selection critera for
+ *      the columns.
+ * params:
+ *      1) it: ptr to struct MDMacColIterator
+ *      2) cb: the new callback function that defines the new selection
+ *          criteria. See `mdmac_col_iter_create` for the function type of
+ *          the callback function
+ * return: void */
 void
 mdmac_col_iter_set_filter(MDMacColIterator* it, mdmac_col_iter_cb_t* cb);
 
