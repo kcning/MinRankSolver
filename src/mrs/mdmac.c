@@ -711,7 +711,7 @@ struct MDMacColIterator {
     bool mono_iter_done;
 };
 
-/* usage: Given parameters that defines struct MDMac, create an
+/* usage: Given parameters that define a struct MDMac, create an
  *      iterator which can be used to iterate over the columns
  *      indices of the struct MDMac
  * params:

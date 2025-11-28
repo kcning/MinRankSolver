@@ -296,7 +296,7 @@ int64_t
 mdmac_iter_random_rows(uint64_t full_nrow, uint64_t nrow, int32_t seed,
                        mdmac_iter_rows_cb_t* cb, void* arg);
 
-/* usage: Given parameters that defines struct MDMac, create an
+/* usage: Given parameters that define a struct MDMac, create an
  *      iterator which can be used to iterate over the columns
  *      indices of the struct MDMac
  * params:
