@@ -185,7 +185,7 @@ proc_nullvec(Hmap* restrict hmap, void* restrict p, void* restrict sol,
 
         // extract the result of linear combi
         for(uint32_t j = 0; j < remaining_ncol; ++j) {
-            // To this this, we need to map variable_index into column index in
+            // To do this, we need to map variable_index into column index in
             // cmsm_kept. We do this with vmap, which maps from variable index
             // to column index in MDMac. remain_cidxs maps from column index
             // in cmsm_kept into column index in MDMac, so we can find column
